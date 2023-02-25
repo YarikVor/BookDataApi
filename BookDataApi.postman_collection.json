@@ -1,0 +1,764 @@
+{
+	"info": {
+		"_postman_id": "1416cb3f-8c3f-4949-b6b0-176b6566a5e9",
+		"name": "BookDataApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26043709"
+	},
+	"item": [
+		{
+			"name": "Get all books",
+			"item": [
+				{
+					"name": "Get all books",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Respose not have a error ', function () {\r",
+									"    pm.response.to.not.have.jsonBody(\"errors\");\r",
+									"});\r",
+									"\r",
+									"pm.test('Respose is json', function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test('Elements is valid output', function () {\r",
+									"let entities = pm.response.json();\r",
+									"    pm.expect(entities[0].id).to.most(entities[1].id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all books and order by author",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Respose not have a error ', function () {\r",
+									"    pm.response.to.not.have.jsonBody(\"errors\");\r",
+									"});\r",
+									"\r",
+									"pm.test('Respose is json', function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test('Elements sorted by author', function () {\r",
+									"    let entities = pm.response.json();\r",
+									"    pm.expect(entities[0].author.charCodeAt(0)).to.most(entities[1].author.charCodeAt(0));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books?order=author",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books"
+							],
+							"query": [
+								{
+									"key": "order",
+									"value": "author"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all books and order by title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Respose not have a error ', function () {\r",
+									"    pm.response.to.not.have.jsonBody(\"errors\");\r",
+									"});\r",
+									"\r",
+									"pm.test('Respose is json', function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test('Elements sorted by title', function () {\r",
+									"    let entities = pm.response.json();\r",
+									"    pm.expect(entities[0].title.charCodeAt(0)).to.most(entities[1].title.charCodeAt(0));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books?order=title",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books"
+							],
+							"query": [
+								{
+									"key": "order",
+									"value": "title"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Recommended (top 10 books by genre)",
+			"item": [
+				{
+					"name": "Genre is empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 400 (error)', function () {\r",
+									"    pm.response.to.have.jsonBody(\"errors\");\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/recommended?genre=",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recommended"
+							],
+							"query": [
+								{
+									"key": "genre",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Genre is Fiction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Respose not have a error ', function () {\r",
+									"    pm.response.to.not.have.jsonBody(\"errors\");\r",
+									"});\r",
+									"\r",
+									"pm.test('Respose is json', function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test('Reviews number more than 10', function () {\r",
+									"    let entities = pm.response.json();\r",
+									"    for(let elem of entities){\r",
+									"        pm.expect(10).to.below(elem.reviewsNumber);\r",
+									"        \r",
+									"    } \r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/recommended?genre=Fiction",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"recommended"
+							],
+							"query": [
+								{
+									"key": "genre",
+									"value": "Fiction"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Book details by id",
+			"item": [
+				{
+					"name": "Get by valid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Respose not have a error ', function () {\r",
+									"    pm.response.to.not.have.jsonBody(\"errors\");\r",
+									"});\r",
+									"\r",
+									"pm.test('Respose is json', function () {\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test('Reviews length above 1', function () {\r",
+									"    let entity = pm.response.json();\r",
+									"    pm.expect(entity.reviews.length).to.above(1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by invalid id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Empty result', function () {\r",
+									"    let entity = pm.response.json();\r",
+									"    pm.response.to.have.body(\"{}\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books/21123",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"21123"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete by id and secretkey",
+			"item": [
+				{
+					"name": "Valid id and secret (WARNING: ID is dynamic)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Result is Ok', function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books/{{deleteId}}?secret={{secret}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"{{deleteId}}"
+							],
+							"query": [
+								{
+									"key": "secret",
+									"value": "{{secret}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Valid id and invalid secret",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Result is error', function () {\r",
+									"    pm.response.to.be.error;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/books/{{deleteId}}?secret=2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"{{deleteId}}"
+							],
+							"query": [
+								{
+									"key": "secret",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Save book",
+			"item": [
+				{
+					"name": "Added elem",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Result is Ok', function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test('Result return id', function () {\r",
+									"    pm.response.to.have.jsonBody('id');\r",
+									"    const element = pm.response.toJSON();\r",
+									"    pm.expect(0).is.not.eq(element.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 0,\r\n  \"title\": \"string\",\r\n  \"cover\": \"string==\",\r\n  \"content\": \"string\",\r\n  \"genre\": \"string\",\r\n  \"author\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/books/save",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"save"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Added elem (invalid cover)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Result is error', function () {\r",
+									"    pm.response.to.be.error;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 0,\r\n  \"title\": \"string\",\r\n  \"cover\": \"string\",\r\n  \"content\": \"string\",\r\n  \"genre\": \"string\",\r\n  \"author\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/books/save",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"save"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update elem",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Result is Ok', function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test('Result return id', function () {\r",
+									"    pm.response.to.have.jsonBody('id');\r",
+									"    const element = pm.response.toJSON();\r",
+									"    pm.expect(pm.variables.get(\"updateId\")).is.not.eq(element.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": {{updateId}},\r\n  \"title\": \"r\",\r\n  \"cover\": \"string==\",\r\n  \"content\": \"string\",\r\n  \"genre\": \"string\",\r\n  \"author\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/books/save",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"save"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Save a review",
+			"item": [
+				{
+					"name": "Added review (valid book id)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Result is Ok', function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test('Result return id', function () {\r",
+									"    pm.response.to.have.jsonBody('id');\r",
+									"    const element = pm.response.toJSON();\r",
+									"    pm.expect(0).is.not.eq(element.id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"message\": \"Test\",\r\n  \"reviewer\": \"Postman\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/books/{{bookIdForReview}}/review",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"{{bookIdForReview}}",
+								"review"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Added review (invalid book id)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Result is Error', function () {\r",
+									"    pm.response.to.be.error;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"message\": \"Test\",\r\n  \"reviewer\": \"Postman\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/books/0/review",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"0",
+								"review"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rate a book",
+			"item": [
+				{
+					"name": "Get score (valid book id)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Result is Ok', function () {\r",
+									"    pm.response.to.be.ok;\r",
+									"});\r",
+									"\r",
+									"pm.test('Result return score', function () {\r",
+									"    pm.response.to.have.jsonBody('score');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"score\": 2\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/books/2/rate",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"2",
+								"rate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get score (invalid book id)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Result is Ok', function () {\r",
+									"    pm.response.to.be.error;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"score\": 2\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/books/0/rate",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"0",
+								"rate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://localhost:7083/api",
+			"type": "string"
+		},
+		{
+			"key": "secret",
+			"value": "yarikvor",
+			"type": "string"
+		},
+		{
+			"key": "deleteId",
+			"value": "14"
+		},
+		{
+			"key": "updateId",
+			"value": "18",
+			"type": "string"
+		},
+		{
+			"key": "bookIdForReview",
+			"value": "2",
+			"type": "string"
+		}
+	]
+}
