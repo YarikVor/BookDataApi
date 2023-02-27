@@ -39,7 +39,7 @@ internal class Program
       config.GetConnectionString("MySqlVersion") ??
       throw new ArgumentNullException();
 
-
+    dbContextOptions.UseMySql(connectionString, new MySqlServerVersion(mySqlVersion));
   }
 
   static void ConfigService(IServiceCollection services)
