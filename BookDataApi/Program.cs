@@ -14,6 +14,8 @@ internal class Program
     builder.Logging.AddConsole();
 
     ConfigService(builder.Services);
+    AddDefaultPolicy(builder.Services);
+
     builder.Services.AddDbContext<BookContext>(c => ConfigDb(c, builder.Configuration));
 
     var app = builder.Build();
@@ -24,9 +26,8 @@ internal class Program
     ConfigApp(app);
 
     ConfigLog(app);
-
+    app.UseCors();
     app.Run();
-
   }
 
   static void ConfigDb(DbContextOptionsBuilder dbContextOptions, ConfigurationManager config)
@@ -40,6 +41,11 @@ internal class Program
       throw new ArgumentNullException();
 
     dbContextOptions.UseMySql(connectionString, new MySqlServerVersion(mySqlVersion));
+  }
+
+  static void AddDefaultPolicy(IServiceCollection services)
+  {
+    services.AddCors(o => o.AddDefaultPolicy(p => p.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod()));
   }
 
   static void ConfigService(IServiceCollection services)
