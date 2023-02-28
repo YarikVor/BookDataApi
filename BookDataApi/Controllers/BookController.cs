@@ -45,7 +45,7 @@ public class ApiController : Controller
   }
 
   [HttpGet("recommended")]
-  public async Task<IActionResult> Recommended(string genre)
+  public async Task<IActionResult> Recommended(string? genre)
   {
     IQueryable<Book> queryable =
       string.IsNullOrEmpty(genre) ? db.Book : db.Book.Where(e => e.Genre == genre);
@@ -57,7 +57,7 @@ public class ApiController : Controller
       .ToArrayAsync();
 
     var booksWithRating = books
-      .Select(e => mapper.Map<Book, BookWithRating>(e));
+      .Select(e => mapper.Map<Book, BookWithRatingAndCover>(e));
 
     return Json(booksWithRating);
   }
@@ -71,6 +71,18 @@ public class ApiController : Controller
       return Json(new object());
     }
     var res = mapper.Map<Book, BookWithRatingAndReviews>(entity);
+    return Json(res);
+  }
+
+  [HttpGet("books/{id}/full")]
+  public async Task<IActionResult> FullDetailsBook(int id)
+  {
+    var entity = await db.Book.FirstOrDefaultAsync(e => e.Id == id);
+    if (entity == null)
+    {
+      return Json(new object());
+    }
+    var res = mapper.Map<Book, FullBookWithRatingAndReviews>(entity);
     return Json(res);
   }
 
@@ -157,6 +169,14 @@ public class ApiController : Controller
       .AverageAsync(e => (double)e);
 
     return Json(new { score = score });
+  }
+
+  [HttpGet("books/all")]
+  public async Task<IActionResult> GetAll()
+  {
+    var array = await db.Book.AsNoTracking().ToArrayAsync();
+    var result = array.Select(e => mapper.Map<Book, BookWithRatingAndCover>(e));
+    return Json(result);
   }
 }
 
